@@ -1,0 +1,93 @@
+/*
+ * IEvent.cpp
+ *
+ *  Created on: 2015-4-12
+ *      Author: root
+ */
+
+#include "IEvent.h"
+#include <sys/epoll.h>
+#include <unistd.h>
+
+namespace rm
+{
+
+IEvent::IEvent()
+{
+	m_fd = -1;
+	m_flag = EPOLLIN;
+	m_interval = 0;
+	m_lasttime = 0;
+}
+
+IEvent::~IEvent()
+{
+	Close();
+}
+
+void IEvent::SetReadFlag()
+{
+	m_flag = EPOLLIN;
+}
+
+int8_t IEvent::GetFlag()
+{
+	return m_flag;
+}
+
+void IEvent::SetWriteFlag()
+{
+	m_flag = EPOLLOUT;
+}
+
+void IEvent::SetReadWriteFlag()
+{
+	m_flag = EPOLLIN|EPOLLOUT;
+}
+
+int8_t IEvent::CreateEpoll(int32_t size)
+{
+	m_fd = epoll_create(size);
+	if (m_fd < 0)
+	{
+		return -1;
+	}
+
+	return 0;
+}
+
+int8_t IEvent::AddEpoll(IEvent *pEvent)
+{
+	struct epoll_event ev;
+	ev.data.ptr = pEvent;
+	ev.events = this->GetFlag();
+	return epoll_ctl (m_fd, EPOLL_CTL_ADD, pEvent->GetFd(), &ev);
+}
+
+int8_t IEvent::RemoveEvent(IEvent *pEvent)
+{
+	struct epoll_event ev;
+	ev.data.ptr = pEvent;
+	ev.events = this->GetFlag();
+	return epoll_ctl (m_fd, EPOLL_CTL_DEL, pEvent->GetFd(), &ev);
+}
+
+int8_t IEvent::ModifyEvent(int32_t sockfd, void *pEvent)
+{
+	struct epoll_event ev;
+	ev.data.ptr = pEvent;
+	ev.events = this->GetFlag();
+	return epoll_ctl (m_fd, EPOLL_CTL_MOD, sockfd, &ev);
+}
+
+int8_t IEvent::Close()
+{
+	return close(m_fd);
+}
+
+int32_t IEvent::GetFd()
+{
+	return m_fd;
+}
+
+}

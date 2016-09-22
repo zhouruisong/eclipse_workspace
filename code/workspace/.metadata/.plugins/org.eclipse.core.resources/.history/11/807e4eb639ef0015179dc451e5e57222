@@ -1,0 +1,45 @@
+/*
+ * CTimeOut.cpp
+ *
+ *  Created on: 2016-3-21
+ *      Author: root
+ */
+
+#include "CTimeOut.h"
+
+namespace rm
+{
+
+CTimeOut::CTimeOut()
+{
+	diff = 0;
+	min = 0;
+}
+
+CTimeOut::~CTimeOut()
+{
+	ITER iter;
+	for (iter = m_eventlist.begin(); iter != m_eventlist.end(); ++iter)
+	{
+		delete (*iter);
+	}
+}
+
+int8_t CTimeOut::OnCreate()
+{
+
+}
+int8_t CTimeOut::OnRead()
+{
+
+}
+int8_t CTimeOut::OnWrite()
+{
+	return 0;
+}
+int8_t CTimeOut::WaitEvents()
+{
+	return 0;
+}
+
+}

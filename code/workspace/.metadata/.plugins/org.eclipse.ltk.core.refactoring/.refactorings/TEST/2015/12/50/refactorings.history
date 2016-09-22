@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="将资源“TEST/hash/CHashProcessor”重命名为“CHashProcessor.h”" description="重命名资源“CHashProcessor”" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="hash/CHashProcessor" name="CHashProcessor.h" stamp="1449409928035" updateReferences="true"/>
+</session>

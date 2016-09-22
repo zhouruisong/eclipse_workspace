@@ -1,0 +1,697 @@
+#include <iostream>
+#include <stdio.h>
+#include <stdlib.h>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <event.h>
+#include <stdarg.h>
+#include <string.h>
+#include <sys/time.h>
+
+
+#include "hash/CHashProcessor.h"
+#include "../core/mutex/CMutexLock.h"
+
+using namespace std;
+
+typedef struct Node
+{
+	int data;
+	struct Node *pLeft;
+	struct Node *pRight;
+} BiTreeNode, *BiTree;
+
+struct LinkNode
+{
+	int data;
+	struct LinkNode *next;
+};
+
+// 创建二叉树
+BiTree CreateTree()
+{
+	BiTree T;
+	int data;
+	scanf("%d", &data);
+
+	if (0 == data)
+	{
+		T = NULL;
+	}
+	else
+	{
+		T = (BiTree) malloc(sizeof(BiTree));
+		T->data = data;
+		T->pLeft = CreateTree();
+		T->pRight = CreateTree();
+	}
+
+	return T;
+}
+
+void Visit(int value)
+{
+	printf("[%d]", value);
+}
+
+// 先序遍历
+void PreOrderTree(BiTree pTree)
+{
+	if (pTree)
+	{
+		Visit(pTree->data);
+		PreOrderTree(pTree->pLeft);
+		PreOrderTree(pTree->pRight);
+	}
+}
+
+// 先序非递归
+void PreOrderTreeMy(BiTree pTree)
+{
+	stack<BiTree> s;
+	BiTree p = pTree;
+
+	while (NULL != p || !s.empty())
+	{
+		while (NULL != p)
+		{
+			Visit(p->data);
+			s.push(p);
+			p = p->pLeft;
+		}
+
+		if (!s.empty())
+		{
+			p = s.top();
+			s.pop();
+			p = p->pRight;
+		}
+	}
+}
+
+// 中序遍历
+void InOrderTree(BiTree pTree)
+{
+	if (pTree)
+	{
+		InOrderTree(pTree->pLeft);
+		Visit(pTree->data);
+		InOrderTree(pTree->pRight);
+	}
+}
+
+// 中序非递归
+void InOrderTreeMy(BiTree pTree)
+{
+	stack<BiTree> s;
+	BiTree p = pTree;
+
+	while (NULL != p || !s.empty())
+	{
+		while (NULL != p)
+		{
+			//Visit(p->data);
+			s.push(p);
+			p = p->pLeft;
+		}
+
+		if (!s.empty())
+		{
+			p = s.top();
+			Visit(p->data);
+			s.pop();
+			p = p->pRight;
+		}
+	}
+}
+
+// 后序遍历
+void PostOrderTree(BiTree pTree)
+{
+	if (pTree)
+	{
+		PostOrderTree(pTree->pLeft);
+		PostOrderTree(pTree->pRight);
+		Visit(pTree->data);
+	}
+}
+
+// 后序非递归
+void PostOrderTreeMy(BiTree pTree, vector<int> &path)
+{
+	stack<pair<BiTree, bool> > s;
+	BiTree root = pTree;
+	s.push(make_pair(root, false));
+	bool visit;
+
+	while (!s.empty())
+	{
+		root = s.top().first;
+		visit = s.top().second;
+		s.pop();
+
+		if (NULL == root)
+		{
+			continue;
+		}
+
+		if (visit)
+		{
+			path.push_back(root->data);
+		}
+		else
+		{
+			// 后续遍历，先左孩子右孩子 最后根节点
+			s.push(make_pair(root, true));
+			s.push(make_pair(root->pRight, false));
+			s.push(make_pair(root->pLeft, false));
+		}
+	}
+	return;
+}
+
+// 求一个二叉树的镜像
+BiTree GetMirror(BiTree pTree)
+{
+	if (NULL == pTree)
+	{
+		return NULL;
+	}
+
+	// 左孩子节点
+	BiTree pLeft = GetMirror(pTree->pLeft);
+	// 右孩子节点
+	BiTree pRight = GetMirror(pTree->pRight);
+
+	// 交换节点
+	pTree->pLeft = pRight;
+	pTree->pRight = pLeft;
+
+	return pTree;
+}
+
+// 求二叉树深度
+int GetDepth(BiTree pTree)
+{
+	if (NULL == pTree)
+	{
+		return 0;
+	}
+
+	int depthLeft = GetDepth(pTree->pLeft);
+	int depthRight = GetDepth(pTree->pRight);
+
+	return (depthLeft > depthRight) ? (depthLeft + 1) : (depthRight + 1);
+}
+
+// 求二叉树叶子节点个数
+int GetLeafNum(BiTree pTree)
+{
+	if (NULL == pTree)
+	{
+		return 0;
+	}
+
+	if ((NULL == pTree->pLeft) && (NULL == pTree->pRight))
+	{
+		Visit(pTree->data);
+		return 1;
+	}
+
+	int leafLeft = GetLeafNum(pTree->pLeft);
+	int leafRight = GetLeafNum(pTree->pRight);
+
+	return leafLeft + leafRight;
+}
+
+void QuickSort(int a[], int low, int high)
+{
+	// 此处防止死循环
+	if (low >= high)
+	{
+		return;
+	}
+
+	int i = low;
+	int j = high;
+	int key = a[low];
+
+	while (i < j)
+	{
+		while (i < j && a[j] > key)
+		{
+			j--;
+		}
+		// 交换
+		swap(a[i], a[j]);
+
+		while (i < j && a[i] < key)
+		{
+			i++;
+		}
+		// 交换
+		swap(a[i], a[j]);
+	}
+
+	// 枢轴归位
+	a[i] = key;
+	QuickSort(a, low, i - 1);
+	QuickSort(a, i + 1, high);
+}
+
+// 打印数组
+void PrintArray(int a[], int len)
+{
+	for (int i = 0; i < len; i++)
+	{
+		Visit(a[i]);
+	}
+}
+
+// 创建链表
+LinkNode *CreateLink()
+{
+	LinkNode *head = (LinkNode *) malloc(sizeof(LinkNode));
+	if (!head)
+	{
+		return NULL;
+	}
+	head->data = -1;
+	head->next = NULL;
+	LinkNode *pHead = head;
+
+	int data;
+	scanf("%d", &data);
+	while (0 != data)
+	{
+		LinkNode *pNode = (LinkNode *) malloc(sizeof(LinkNode));
+		pNode->data = data;
+		pNode->next = NULL;
+		head->next = pNode;
+		head = pNode;
+		scanf("%d", &data);
+	}
+
+	return pHead;
+}
+
+// 打印链表
+void PrintLink(LinkNode *phead)
+{
+	LinkNode *pTemp = phead->next;
+	while (pTemp)
+	{
+		Visit(pTemp->data);
+		pTemp = pTemp->next;
+	}
+}
+
+// o(n)获取链表倒数第K个节点的值
+LinkNode *GetKth(LinkNode *phead, int k)
+{
+	if (NULL == phead)
+	{
+		return phead;
+	}
+
+	LinkNode *pAhead = phead;
+	LinkNode *pBehind = phead;
+
+	// pAhead先走k-1步
+	while (k > 1 && (NULL != pAhead->next))
+	{
+		pAhead = pAhead->next;
+		k--;
+	}
+
+	// K大于链表长度
+	if (k > 1 || (NULL == pAhead->next))
+	{
+		return NULL;
+	}
+
+	while (pAhead->next)
+	{
+		pAhead = pAhead->next;
+		pBehind = pBehind->next;
+	}
+
+	return pBehind;
+}
+
+// 获取链表的中间节点
+// 前面指针每走两步，后面指针走一步
+LinkNode *GetMiddle(LinkNode *phead)
+{
+	if (NULL == phead)
+	{
+		return phead;
+	}
+
+	LinkNode *pAhead = phead;
+	LinkNode *pBehind = phead;
+
+	while (pAhead->next)
+	{
+		pBehind = pBehind->next;
+		pAhead = pAhead->next;
+		if (NULL != pAhead->next)
+		{
+			pAhead = pAhead->next;
+		}
+	}
+
+	return pBehind;
+}
+
+// 到序打印链表，借助stack
+void PrintLinkRev(LinkNode *phead)
+{
+	if (NULL == phead)
+	{
+		return;
+	}
+
+	stack<LinkNode *> s;
+	LinkNode *pNode = phead;
+	while (pNode->next)
+	{
+		s.push(pNode->next);
+		pNode = pNode->next;
+	}
+
+	while (!s.empty())
+	{
+		pNode = s.top();
+		s.pop();
+		Visit(pNode->data);
+	}
+}
+
+// 链表反转
+LinkNode *ReverseLink(LinkNode *phead)
+{
+	LinkNode *head = phead;
+	LinkNode *cur = head->next;
+	head->next = NULL;
+	LinkNode *ne = NULL;
+	LinkNode *temp = NULL;
+
+	while (cur)
+	{
+		ne = cur->next;
+		cur->next = temp;
+		temp = cur;
+		cur = ne;
+	}
+
+	head->next = temp;
+	return head;
+}
+
+//0x1           低地址------>高地址
+// 大端(大尾端)   0x0          0x1
+// 小端(小尾端)   0x1          0x0
+// 返回0表示是大端，返回1表示小端
+int CheckSystem()
+{
+	union check
+	{
+		int i;
+		char ch;
+	} c;
+	c.i = 1;
+
+	return (c.ch == 1);
+}
+
+// 返回0表示是大端，返回1表示小端
+int BigLittle()
+{
+	int a = 1;
+	char b = *(char *) &a;
+	return (b == 1);
+}
+
+// 枚举法计算小于100的素数（除了本身和1外没有别的因数）
+void GetSuShu()
+{
+	int n;
+	int i;
+	for (n = 2; n <= 100; n++)
+	{
+		for (i = 2; i < n; i++)
+		{
+			if (n % i == 0)
+			{
+				break;
+			}
+		}
+
+		if (i >= n)
+		{
+			Visit(n);
+		}
+	}
+}
+
+// 实现一个只能指针
+template<typename T>
+class smart_shart_ptr
+{
+public:
+	smart_shart_ptr(T *ptr):m_ptr(ptr)
+	{
+		printf("init\n");
+	}
+
+	~smart_shart_ptr()
+	{
+		printf("destory\n");
+		delete m_ptr;
+	}
+
+	smart_shart_ptr(const T& other)
+	{
+		m_ptr = other;
+	}
+
+	T* operator->() const
+	{
+		return m_ptr;
+	}
+
+private:
+		T* m_ptr;
+};
+
+struct namestc
+{
+	int len;
+	char name[];
+};
+struct memberstc
+{
+	int mem;
+	int len;
+	char member[];
+};
+
+struct test
+{
+	struct namestc a;
+	struct memberstc b;
+};
+
+#define __FILE_INFO     __FILE__, __LINE__, __FUNCTION__
+#define INFO(format, ...)    event_info("%s:%d****%s "format"\n", __FILE_INFO, __VA_ARGS__)
+//#define INFO(A)    printf("%s:%d****%s "A"\n", __FILE__, __LINE__, __FUNCTION__, __VA_ARGS__)
+#define debug(f,arg...) fprintf(stderr, "%s:%d %s***"f"\n", __FILE_INFO, ##arg)
+
+static void eventLog(int severity, const char *msg)
+{
+	const char *severity_str;
+	switch (severity)
+	{
+	case _EVENT_LOG_DEBUG:
+		severity_str = "DEBUG";
+		break;
+	case _EVENT_LOG_MSG:
+		severity_str = "INFO";
+		break;
+	case _EVENT_LOG_WARN:
+		severity_str = "WARN";
+		break;
+	case _EVENT_LOG_ERR:
+		severity_str = "ERROR";
+		break;
+	default:
+		severity_str = "???";
+		break;
+	}
+
+	struct timeval tv;
+	gettimeofday(&tv, NULL);
+	struct tm result;
+	localtime_r(&tv.tv_sec, &result);
+
+	(void) fprintf(stderr, "[%s] %d-%d-%d %d:%d:%d %s\n",
+			severity_str, result.tm_year+1900, result.tm_mon+1, result.tm_mday, result.tm_hour, result.tm_min, result.tm_sec, msg);
+}
+
+static void LogHelper(int severity, int log_errno, const char *fmt, va_list ap)
+{
+	char buf[1024];
+	size_t len;
+	if (fmt != NULL)
+		evutil_vsnprintf(buf, sizeof(buf), fmt, ap);
+	else
+		buf[0] = '\0';
+
+	if (log_errno >= 0)
+	{
+		len = strlen(buf);
+		if (len < sizeof(buf) - 3)
+		{
+			evutil_snprintf(buf + len, sizeof(buf) - len, ": %s", strerror(
+					log_errno));
+		}
+	}
+
+	eventLog(severity, buf);
+}
+
+void event_info(const char *fmt, ...)
+{
+	va_list ap;
+	va_start(ap, fmt);
+	LogHelper(_EVENT_LOG_MSG, -1, fmt, ap);
+	va_end(ap);
+}
+
+struct event ev;
+struct timeval tv;
+
+void time_cb(int fd, short event, void *argc)
+{
+	cout<<"timer arrive"<<endl;
+	event_add(&ev, &tv);
+}
+
+int main(int argv, char *argc[])
+{
+	INFO("init OK[%d][%d][%d][%d]", 1, 3, 4, 5);
+	CLockGuard lock;
+	CLockGuard guard(&lock);
+	guard.Lock();
+//	struct event_base *base = event_init();
+//	tv.tv_sec = 1;
+//	tv.tv_usec = 0;
+//	//INFO("init OK[%d][%d][%d][%d]", 1, 3, 4, 5);
+//	debug("init OK[%d][%d][%d][%d]", 1, 3, 4, 5);
+//	evtimer_set(&ev, time_cb, NULL);
+//	event_add(&ev, &tv);
+//	event_base_dispatch(base);
+//	CHashMap *pHash = new CHashMap(5, 5);
+//	if (false == pHash->Create())
+//	{
+//		printf("pHash create fail");
+//	}
+
+	// 素数
+//	printf("\n素数\n");
+//	GetSuShu();
+//	// 大小端判断
+//	printf("\n大小端判断,返回0表示是大端，返回1表示小端\n");
+//	Visit(CheckSystem());
+//	Visit(BigLittle());
+//
+//	test *ptest = new test();
+//	printf("\nptest[%p], ptest->a.name[%p], ptest->b[%p]\n", ptest, &ptest->a.name, &ptest->b);
+//	Visit(sizeof(memberstc));
+
+	//	int a[] = {10, 3, 5, 9, 1, 8, 6, 0, 7, 2};
+	//	int len = sizeof(a)/sizeof(int);
+	//
+	//	printf("\n快排序前:\n");
+	//	PrintArray(a, len);
+	//	QuickSort(a, 0, len-1);
+	//	printf("\n快排序后:\n");
+	//	PrintArray(a, len);
+	//
+	//	printf("\n\n创建链表, 请输入数字，0表示结束, 例如1 2 3 4 5 6 7 0\n");
+	//	LinkNode *pLink = CreateLink();
+	//	printf("打印链表:\n");
+	//	PrintLink(pLink);
+	//
+	//	//获取链表倒数第K个节点的值
+	//	printf("\n请输入倒数第K个节点的值:");
+	//	int k;
+	//	scanf("%d", &k);
+	//	LinkNode *pkth = GetKth(pLink, k);
+	//	if (NULL == pkth)
+	//	{
+	//		printf("\n链表倒数第[%d]个节点不存在:\n", k);
+	//	}
+	//	else
+	//	{
+	//		printf("\n链表倒数第[%d]节点值:\n", k);
+	//		Visit(pkth->data);
+	//	}
+	//
+	//	// 获取链表的中间节点
+	//	printf("\n链表的中间节点:\n");
+	//	LinkNode *pMiddle = GetMiddle(pLink);
+	//	if (pMiddle)
+	//	{
+	//	    Visit(pMiddle->data);
+	//	}
+	//
+	//	// 到序打印链表，借助stack
+	//	printf("\n到序打印链表:\n");
+	//	PrintLinkRev(pLink);
+	//
+	//	LinkNode *pLinkRev = ReverseLink(pLink);
+	//	printf("\n打印反转后的链表: \n");
+	//	PrintLink(pLinkRev);
+	//
+	//	printf("\n\n输入二叉树节点值，0表示结束,例如1 2 3 0 0 4 0 0 5 6 0 0 0\n");
+	//	BiTree pTree = CreateTree();
+	//	printf("先序遍历: \n");
+	//	PreOrderTree(pTree);
+	//	printf("\n先序遍历非递归: \n");
+	//	PreOrderTreeMy(pTree);
+	//
+	//	printf("\n中序遍历: \n");
+	//	InOrderTree(pTree);
+	//	printf("\n中序遍历非递归: \n");
+	//	InOrderTreeMy(pTree);
+	//
+	//	printf("\n后序遍历: \n");
+	//	PostOrderTree(pTree);
+	//	printf("\n后序遍历非递归: \n");
+	//	vector<int> path;
+	//	PostOrderTreeMy(pTree, path);
+	//	vector<int>::iterator iter = path.begin();
+	//	for (; iter != path.end(); ++iter)
+	//	{
+	//		Visit(*iter);
+	//	}
+	//
+	//	printf("\n二叉树深度:\n");
+	//	int depth = GetDepth(pTree);
+	//	Visit(depth);
+	//
+	//	printf("\n二叉树叶子节点:\n");
+	//	int leaf = GetLeafNum(pTree);
+	//	printf("\n二叉树叶子节点个数:\n");
+	//	Visit(leaf);
+	//
+	//	printf("\n二叉树镜像:\n");
+	//	BiTree pMirror = GetMirror(pTree);
+	//	PreOrderTree(pMirror);
+
+	printf("\n\n");
+	return 0;
+}

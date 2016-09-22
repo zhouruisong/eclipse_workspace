@@ -1,0 +1,7 @@
+
+****项目libevent-1.4.14b-stable配置缺省值的构建****
+
+make all 
+CDPATH="${ZSH_VERSION+.}:" && cd . && /bin/sh /tmp/libevent-1.4.14b-stable/missing --run aclocal-1.11 
+aclocal-1.11: `configure.ac' or `configure.in' is required
+make: *** [aclocal.m4] 错误 1

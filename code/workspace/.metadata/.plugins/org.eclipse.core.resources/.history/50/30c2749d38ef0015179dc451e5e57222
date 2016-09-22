@@ -1,0 +1,27 @@
+/*
+ * CTimeOut.h
+ *
+ *  Created on: 2016-3-21
+ *      Author: root
+ */
+
+#ifndef CTIMEOUT_H_
+#define CTIMEOUT_H_
+
+namespace rm
+{
+
+class CTimeOut: public IEvent
+{
+public:
+	CTimeOut();
+	virtual ~CTimeOut();
+	virtual int8_t OnCreate() = 0;
+	virtual int8_t OnRead() = 0;
+	virtual int8_t OnWrite() = 0;
+	virtual int8_t WaitEvents() = 0;
+};
+
+}
+
+#endif /* CTIMEOUT_H_ */

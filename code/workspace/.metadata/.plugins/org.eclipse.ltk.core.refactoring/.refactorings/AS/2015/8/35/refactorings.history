@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="将资源“AS/core/makefile”重命名为“bak”" description="重命名资源“makefile”" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="core/makefile" name="bak" stamp="1440684754085" updateReferences="true"/>
+</session>

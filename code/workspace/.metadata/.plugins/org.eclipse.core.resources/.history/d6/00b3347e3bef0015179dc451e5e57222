@@ -1,0 +1,47 @@
+/*
+ * IEvent.h
+ *
+ *  Created on: 2015-4-12
+ *      Author: root
+ */
+
+#ifndef IEVENT_H_
+#define IEVENT_H_
+
+namespace rm
+{
+
+#define MAX_EPOLL_SIZE    1024
+
+class IEvent
+{
+public:
+	IEvent();
+	virtual ~IEvent();
+
+	void SetReadFlag();
+	int8_t GetFlag();
+	void SetWriteFlag();
+	void SetReadWriteFlag();
+
+	virtual int8_t OnCreate() = 0;
+	virtual int8_t OnRead() = 0;
+	virtual int8_t OnWrite() = 0;
+	virtual int8_t OnTimeOut() = 0;
+
+protected:
+	int8_t CreateEpoll(int32_t size);
+	int8_t AddEpoll(IEvent *pEvent);
+	int8_t RemoveEvent(IEvent *pEvent);
+	int32_t GetFd();
+
+protected:
+	int32_t m_fd;
+	int8_t m_flag;
+	uint64_t m_interval;
+	uint64_t m_lasttime;
+};
+
+}
+
+#endif /* IEVENT_H_ */

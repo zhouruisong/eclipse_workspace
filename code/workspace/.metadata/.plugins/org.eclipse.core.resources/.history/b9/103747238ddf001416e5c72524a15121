@@ -1,0 +1,11 @@
+#include "CMathndrControllor.h"
+#include <stdio.h>
+
+using namespace rm;
+
+int main()
+{
+	CMathndrControllor *pController = new CMathndrControllor();
+
+	return 0;
+}

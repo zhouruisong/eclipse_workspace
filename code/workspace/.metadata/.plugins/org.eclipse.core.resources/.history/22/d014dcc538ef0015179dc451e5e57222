@@ -1,0 +1,29 @@
+/*
+ * CTimeOut.cpp
+ *
+ *  Created on: 2016-3-21
+ *      Author: root
+ */
+
+#include "CTimeOut.h"
+
+namespace rm
+{
+
+CTimeOut::CTimeOut()
+{
+	// TODO 自动生成的构造函数存根
+
+}
+
+CTimeOut::~CTimeOut()
+{
+	// TODO 自动生成的析构函数存根
+}
+
+virtual int8_t OnCreate();
+virtual int8_t OnRead();
+virtual int8_t OnWrite();
+virtual int8_t WaitEvents();
+
+}

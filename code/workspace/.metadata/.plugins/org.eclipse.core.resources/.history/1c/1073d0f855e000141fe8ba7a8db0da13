@@ -1,0 +1,8 @@
+test:main.o CMathndrControllor.o
+	gcc -o test
+	
+TARGETCPP = CMathndrControllor.cpp
+
+TARGET = test
+TARGETLIB = main.a
+

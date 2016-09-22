@@ -1,0 +1,21 @@
+/*
+ * CMathndrControllor.h
+ *
+ *  Created on: 2015-4-10
+ *      Author: root
+ */
+
+#ifndef CMATHNDRCONTROLLOR_H_
+#define CMATHNDRCONTROLLOR_H_
+
+namespace rm {
+
+class CMathndrControllor {
+public:
+	CMathndrControllor();
+	virtual ~CMathndrControllor();
+};
+
+}
+
+#endif /* CMATHNDRCONTROLLOR_H_ */

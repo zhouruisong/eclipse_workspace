@@ -1,0 +1,8 @@
+#include "CMathndrControllor.h"
+#include <stdio>
+
+int main()
+{
+	CMathndrControllor *pController = new CMathndrControllor();
+
+}

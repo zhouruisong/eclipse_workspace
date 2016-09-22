@@ -1,0 +1,89 @@
+/*
+ * CMutexLock.cpp
+ *
+ *  Created on: 2015-4-22
+ *      Author: root
+ */
+
+#include "CMutexLock.h"
+#include "../osi/Osi.h"
+
+namespace rm
+{
+
+CMutexLock::CMutexLock()
+{
+	m_isInited = false;
+	m_isLock = false;
+}
+
+CMutexLock::~CMutexLock()
+{
+	pthread_mutex_init(&mutex, NULL);
+}
+
+int8_t CMutexLock::Create()
+{
+	if (!m_isInited)
+	{
+		return -1;
+	}
+
+	int32_t ret = OsiCreateMutex(&m_mutex);
+	if (0 != ret)
+	{
+		return -1;
+	}
+	m_isInited = true;
+}
+
+int8_t CMutexLock::Lock()
+{
+	if (!m_isLock)
+	{
+		return -1;
+	}
+
+	int32_t ret = OsiLockMutex(&m_mutex);
+	if (0 != ret)
+	{
+		return -1;
+	}
+	m_isLock = true;
+}
+
+int8_t CMutexLock::UnLock()
+{
+	if (m_isLock)
+	{
+		return -1;
+	}
+
+	int32_t ret = OsiUnLockMutex(&m_mutex);
+	if (0 != ret)
+	{
+		return -1;
+	}
+	m_isLock = false;
+}
+
+CMutexGuard::CMutexGuard(ILock *pLock)
+{
+	m_pLock = pLock;
+}
+
+void CMutexGuard::Lock()
+{
+	m_pLock->Lock();
+}
+
+void CMutexGuard::Unlock()
+{
+	m_pLock->UnLock();
+}
+
+
+
+
+
+}

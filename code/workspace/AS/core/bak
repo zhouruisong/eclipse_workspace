@@ -1,0 +1,10 @@
+test:main.o CMathndrControllor.o
+	g++ main.o CMathndrControllor.o -o test
+
+CMathndrControllor.o:CMathndrControllor.cpp CMathndrControllor.h
+	g++ -c CMathndrControllor.cpp -o CMathndrControllor.o
+main.o:main.cpp CMathndrControllor.h
+	g++ -c main.cpp -o main.o
+.PHONY:clean
+clean:
+	-rm -fr *.o test

@@ -1,0 +1,23 @@
+/*
+ * CTimeOut.h
+ *
+ *  Created on: 2016-3-21
+ *      Author: root
+ */
+
+#ifndef CTIMEOUT_H_
+#define CTIMEOUT_H_
+
+namespace rm
+{
+
+class CTimeOut
+{
+public:
+	CTimeOut();
+	virtual ~CTimeOut();
+};
+
+}
+
+#endif /* CTIMEOUT_H_ */

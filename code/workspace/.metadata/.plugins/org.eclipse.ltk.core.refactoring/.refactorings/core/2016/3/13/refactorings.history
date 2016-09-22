@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="将资源“core/src/thread”重命名为“mutex”" description="重命名资源“thread”" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="src/thread" name="mutex" stamp="1458544729851" updateReferences="true"/>
+</session>

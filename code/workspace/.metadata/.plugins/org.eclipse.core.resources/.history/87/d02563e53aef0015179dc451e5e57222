@@ -1,0 +1,63 @@
+/*
+ * CTimeOut.cpp
+ *
+ *  Created on: 2016-3-21
+ *      Author: root
+ */
+
+#include "CTimeOut.h"
+
+namespace rm
+{
+
+CTimeOut::CTimeOut()
+{
+}
+
+CTimeOut::~CTimeOut()
+{
+	ITER iter;
+	for (iter = m_eventlist.begin(); iter != m_eventlist.end(); ++iter)
+	{
+		delete (*iter);
+	}
+}
+
+int8_t CTimeOut::OnCreate()
+{
+	return 0;
+}
+int8_t CTimeOut::OnRead()
+{
+	int64_t diff = 0, min = LONG_MAX;
+	unint64_t cutt = 0;
+	ITER iter;
+	IEvent *mod = NULL;
+	for (iter = m_eventlist.begin(); iter != m_eventlist.end(); ++iter)
+	{
+		mod  = *iter;
+		if (NULL == mod)
+		{
+			continue;
+		}
+		if (m_interval > 1 && m_lasttime > 1)
+		{
+			diff = cutt - m_lasttime;
+			if (diff < 0)
+			{
+				diff *= -1;
+			}
+		}
+
+	}
+}
+int8_t CTimeOut::OnWrite()
+{
+	return 0;
+}
+int8_t CTimeOut::WaitEvents()
+{
+	return 0;
+}
+
+}

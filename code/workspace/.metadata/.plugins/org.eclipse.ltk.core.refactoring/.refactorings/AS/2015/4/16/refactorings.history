@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">&#x0A;<refactoring comment="将资源“AS/core/Osi.h”重命名为“Osi.c”" description="重命名资源“Osi.h”" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="core/Osi.h" name="Osi.c" stamp="1428810801694" updateReferences="true"/>&#x0A;<refactoring comment="将资源“AS/osi/Osi.c”重命名为“Osi.cpp”" description="重命名资源“Osi.c”" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="osi/Osi.c" name="Osi.cpp" stamp="1429015803347" updateReferences="true"/>
+</session>

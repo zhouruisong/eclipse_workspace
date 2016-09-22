@@ -1,0 +1,63 @@
+/*
+ * CMutexLock.h
+ *
+ *  Created on: 2015-4-22
+ *      Author: root
+ */
+
+#ifndef CMUTEXLOCK_H_
+#define CMUTEXLOCK_H_
+
+#include <sys/types.h>
+
+namespace rm
+{
+class ILock
+{
+public:
+	virtual ~ILock();
+	virtual int8_t Create() = 0;
+
+protected:
+	virtual int8_t Lock() = 0;
+	virtual int8_t UnLock() = 0;
+	friend class CLockGuard;
+};
+
+class CMutexLock: public ILock
+{
+public:
+	CMutexLock();
+	virtual ~CMutexLock();
+	virtual int8_t Create() = 0;
+
+private:
+	virtual int8_t Lock();
+	virtual int8_t UnLock();
+	friend class CMutexCondition;
+
+private:
+	pthread_mutex_t m_mutex;
+	bool m_isInited;
+	bool m_isLock;
+};
+
+class CLockGuard
+{
+public:
+	explicit CLockGuard(ILock *pLock);
+	~CLockGuard();
+
+	void Lock();
+	void Unlock();
+protected:
+	CLockGuard(const CLockGuard &other);
+	CLockGuard& operator=(const CLockGuard &other);
+
+private:
+	ILock *m_pLock;
+};
+
+}
+
+#endif /* CMUTEXLOCK_H_ */

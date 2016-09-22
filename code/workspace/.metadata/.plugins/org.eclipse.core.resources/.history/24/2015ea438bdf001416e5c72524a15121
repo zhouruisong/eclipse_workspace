@@ -1,0 +1,21 @@
+/*
+ * CMathndrControllor.cpp
+ *
+ *  Created on: 2015-4-10
+ *      Author: root
+ */
+
+#include "CMathndrControllor.h"
+
+namespace rm {
+
+CMathndrControllor::CMathndrControllor() {
+	// TODO 自动生成的构造函数存根
+
+}
+
+CMathndrControllor::~CMathndrControllor() {
+	// TODO 自动生成的析构函数存根
+}
+
+}
