@@ -1,0 +1,56 @@
+#ifndef OSI_H_
+#define OSI_H_
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include "CThread.h"
+#include <sys/socket.h>
+#include <sys/types.h>
+#include <stdlib.h>
+#include <pthread.h>
+#include <stdio.h>
+#include <fcntl.h>
+
+//class CThread;
+//typedef void *(CThread::*Thread_Fun)(void * ptr);
+typedef void *(*thread_Fun)(void *ptr);
+
+int32_t OsiCreatePipe(int32_t domain, int32_t type, int32_t protocol, int32_t fd[2]);
+
+int32_t OsiCreateSoket(int32_t domain, int32_t type, int32_t protocol);
+
+int32_t OsiGePeerName(int32_t sockfd, struct sockaddr *addr, socklen_t *addrlen);
+
+int32_t OsiBind(int32_t sockfd, struct sockaddr *addr, socklen_t addrlen);
+
+int32_t OsiListen(int32_t sockfd, int32_t backlog);
+
+int32_t OsiConnect(int32_t sockfd, struct sockaddr *addr, socklen_t addrlen);
+
+int32_t OsiAccept(int32_t sockfd, struct sockaddr *addr, socklen_t *addrlen);
+
+int32_t OsiSend(int32_t sockfd, const void *msg, size_t len);
+
+int32_t OsiReceive(int32_t sockfd, void *buf, size_t len);
+
+int32_t OsiSendto(int32_t sockfd, const void *msg, size_t len, u_int32_t flags, const struct sockaddr *to, socklen_t tolen);
+
+int32_t OsiRecvfrom(int32_t sockfd, void *buf, size_t len, u_int32_t flags, struct sockaddr *from, socklen_t *fromlen);
+
+int32_t OsiPthreadCreate(pthread_t *tidp, thread_Fun, void *arg);
+
+int32_t OsiCreateMutex(pthread_mutex_t *mutex);
+int32_t OsiLockMutex(pthread_mutex_t *mutex);
+int32_t OsiUnLockMutex(pthread_mutex_t *mutex);
+int32_t OsiDestroyMutex(pthread_mutex_t *mutex);
+
+void OsiSetSocketBlock(int32_t sockfd, int8_t isblock);
+void OsiSetBuffSize(int32_t socketfd);
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* OSI_H_ */

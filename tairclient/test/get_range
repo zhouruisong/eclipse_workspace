@@ -1,0 +1,10 @@
+{
+ "command":"get_range",
+ "server_addr":"192.168.226.162:5198",
+ "group_name":"group_1",
+ "keys":{
+  "prefix":"vhost_app",
+  "offset":"0",
+  "limit":"0"
+ }
+}

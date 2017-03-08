@@ -1,0 +1,13 @@
+{
+"command":"put",
+"server_addr":"192.168.226.162:5198",
+"group_name":"group_1",
+"keys":[
+ {
+  "key":"vhost_app_file",
+  "value":"vhost_app_file",
+  "createtime":"12342423",
+  "expiretime":"4324234"
+ }
+ ]
+}

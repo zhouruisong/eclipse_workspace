@@ -1,0 +1,14 @@
+{
+ "command":"pput",
+ "server_addr":"192.168.226.162:5198",
+ "group_name":"group_1",
+ "keys":[
+  {
+   "prefix":"vhost_app",
+   "key":"file",
+   "value":"...",
+   "createtime":"13213",
+   "expiretime":"f432423423"
+  }
+ ]
+}

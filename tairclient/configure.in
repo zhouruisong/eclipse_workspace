@@ -1,0 +1,23 @@
+#                                               -*- Autoconf -*-
+# Process this file with autoconf to produce a configure script.
+
+AC_PREREQ(2.68)
+AC_INIT(tairclient, 1.0, liuyiji@xunlei.com)
+AM_INIT_AUTOMAKE(tairclient, 1.0)
+
+# Checks for programs.
+AC_PROG_CXX
+AC_PROG_CC
+
+# Checks for libraries.
+AC_PROG_RANLIB
+# Checks for header files.
+
+# Checks for typedefs, structures, and compiler characteristics.
+AC_HEADER_STDBOOL
+AC_TYPE_SIZE_T
+
+# Checks for library functions.
+AC_CHECK_FUNCS(memset)
+
+AC_OUTPUT(Makefile)

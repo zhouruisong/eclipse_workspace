@@ -29,7 +29,7 @@ private:
 	pthread_t pid[MAX_PTHREAD_NUM];
 };
 
-typedef int8_t *(CThread::*Thread_Fun)(const int8_t thread_index);
+typedef void *(CThread::*Thread_Fun)(void *ptr);
 }
 
 #endif /* CTHREAD_H_ */

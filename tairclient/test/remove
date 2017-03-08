@@ -1,0 +1,10 @@
+{
+"command":"remove",
+"server_addr":"192.168.226.162:5198",
+ "group_name":"group_1",
+"keys":[
+ {
+  "key":"vhost_app_file"
+ }
+ ]
+}

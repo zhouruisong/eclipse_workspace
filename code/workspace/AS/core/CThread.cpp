@@ -42,6 +42,7 @@ static void *thread_fun(void *arg)
 
 CThread::CThread()
 {
+	m_pidnum = 0;
 }
 
 CThread::~CThread()
